@@ -1,0 +1,33 @@
+---
+- name: CHECKING AND ANALYSING DATA FROM ROUTERS
+  hosts: nokia
+  connection: network_cli
+  gather_facts: no
+
+  tasks:
+    - name: COLLECT DATA
+      sros_command:
+        commands:
+          - show version
+          - show chassis
+          - show card
+      register: show_output
+
+    - name: GENERATE THE DATASET
+      template:
+        src: templates/classic_check.j2
+        dest: results/{{ inventory_hostname }}_data.yml
+
+    - name: IMPORT THE GENERATED DATASET
+      include_vars:
+        file: results/{{ inventory_hostname }}_data.yml
+
+    - name: IMPORT THE INTENT DATASET
+      include_vars:
+        file: vars/intent.yml
+
+    - name: DO THE DIFF ANALYSE
+      template:
+        src: templates/diff_analyse.j2
+        dest: results/{{ inventory_hostname }}_report.txt
+...

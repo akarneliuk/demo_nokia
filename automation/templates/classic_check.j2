@@ -1,0 +1,35 @@
+---
+device_real:
+{% for show_entry in show_output.stdout_lines %}
+{% if loop.index0 == 0 %}
+{% for line_entry in show_entry %}
+{% if 'TiMOS' in line_entry %}
+  version: {{ line_entry.split(' ')[0].split('-')[2] }}
+{% endif %}
+{% endfor %}
+{% elif loop.index0 == 1 %}
+  system:
+{% for line_entry in show_entry %}
+{% if 'Name' in line_entry %}
+    hostname: {% set clean_line = [] %}{% for elem in line_entry.split(' ') %}{% if elem != '' %}{% set dummy_var = clean_line.append(elem) %}{% endif %}{% endfor %}{{ clean_line[2] }}
+{% elif 'Type' in line_entry %}
+    type: {% set clean_line = [] %}{% for elem in line_entry.split(' ') %}{% if elem != '' %}{% set dummy_var = clean_line.append(elem) %}{% endif %}{% endfor %}{{ clean_line[2] }} {{ clean_line[3] }}
+{% endif %}
+{% endfor %}
+{% elif loop.index0 == 2 %}
+  cards:
+{% for line_entry in show_entry %}
+{% if 'unprovisioned' in line_entry %}
+    {{ line_entry.split(' ')[0] }}:
+      type: {{ show_entry[loop.index0 + 1] | replace(' ', '') }}
+      state: {% set clean_line = [] %}{% for elem in line_entry.split(' ') %}{% if elem != '' %}{% set dummy_var = clean_line.append(elem) %}{% endif %}{% endfor %}{{ clean_line[4] }}
+{% elif 'up' in line_entry%}
+    {{ line_entry.split(' ')[0] }}: {% set clean_line = [] %}{% for elem in line_entry.split(' ') %}{% if elem != '' %}{% set dummy_var = clean_line.append(elem) %}{% endif %}{% endfor %}
+
+      type: {{ clean_line[1] }}
+      state: {{ clean_line[3] }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+...

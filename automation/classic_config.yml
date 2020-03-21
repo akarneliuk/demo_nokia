@@ -1,0 +1,30 @@
+---
+- name: CHECKING AND ANALYSING DATA FROM ROUTERS
+  hosts: nokia
+  connection: network_cli
+  gather_facts: no
+
+  tasks:
+    - name: IMPORT RESULT OF CHECK
+      include_vars:
+        file: "results/{{ inventory_hostname }}_data.yml"
+
+    - name: CONFIGURE NOKIA SR OS -- 1 --
+      sros_config:
+        lines:
+          - name {{ inventory_hostname }}
+        parents:
+          - configure
+          - system
+
+    - name: CONFIGURE NOKIA SR OS -- 2 --
+      sros_config:
+        lines:
+          - card-type {{ item.value.type | regex_replace(':.*$', '') }} level {{ item.value.type | regex_replace('^.*:', '') }}
+          - no shutdown
+        parents:
+          - configure
+          - card {{ item.key }}
+      loop: "{{ lookup('dict', device_real.cards) }}"
+      when: item.value.state == 'unprovisioned'
+...

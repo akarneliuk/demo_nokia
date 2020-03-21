@@ -1,0 +1,22 @@
+Perform the diff analysis for '{{ inventory_hostname }}'
+Checking SW version...  {% if device_intent.version == device_real.version %}OK{% else %}NOT OK (as-is: '{{ device_real.version }}', to-be: '{{ device_intent.version }}'){% endif %}
+
+Checking hostname...    {% if inventory_hostname == device_real.system.hostname %}OK{% else %}NOT OK (as-is: '{{ device_real.system.hostname }}', to-be: '{{ inventory_hostname }}'){% endif %}
+
+Checking device type... {% if device_intent.system.type == device_real.system.type %}OK{% else %}NOT OK (as-is: '{{ device_real.system.type }}', to-be: '{{ device_intent.system.type }}'){% endif %}
+
+{% for dr_slot, dr_content in  device_real.cards.items() %}
+Checking slot '{{ dr_slot }}'...
+{% set slot_matcher = [] %}
+{% for di_slot, di_content in device_intent.cards.items() %}
+{% if dr_slot == di_slot %}
+{% set dummy_var = slot_matcher.append(1) %}
+  Card type...          {% if dr_content.type == di_content.type %}OK{% else %}NOT OK (as-is: '{{ dr_content.type }}', to-be: '{{ di_content.type }}'){% endif %}
+
+  Card state...         {% if dr_content.state == di_content.state %}OK{% else %}NOT OK (as-is: '{{ dr_content.state }}', to-be: '{{ di_content.state }}'){% endif %}
+
+{% endif %}
+{% endfor %}
+  Slot number...        {% if slot_matcher | length > 0 %}OK{% else %}NOT OK (There is no matching slot number in the intent){% endif %}
+
+{% endfor %}

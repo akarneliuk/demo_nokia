@@ -1,0 +1,12 @@
+Perform the diff analysis for 'VSR12'
+Checking SW version...  OK
+Checking hostname...    OK
+Checking device type... OK
+Checking slot 'A'...
+  Card type...          OK
+  Card state...         OK
+  Slot number...        OK
+Checking slot '1'...
+  Card type...          OK
+  Card state...         OK
+  Slot number...        OK

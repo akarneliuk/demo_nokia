@@ -1,0 +1,13 @@
+---
+device_intent:
+  version: 20.2.R1
+  system:
+    type: 7750 SR-1
+  cards:
+    1:
+      type: iom-1:he
+      state: up
+    A: 
+      type: cpm-1
+      state: up/active
+...
