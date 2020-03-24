@@ -1,6 +1,6 @@
 Perform the diff analysis for 'VSR11'
 Checking SW version...  OK
-Checking hostname...    NOT OK (as-is: 'vSIM', to-be: 'VSR11')
+Checking hostname...    OK
 Checking device type... OK
 Checking slot 'A'...
   Card type...          OK
@@ -8,5 +8,5 @@ Checking slot 'A'...
   Slot number...        OK
 Checking slot '1'...
   Card type...          OK
-  Card state...         NOT OK (as-is: 'unprovisioned', to-be: 'up')
+  Card state...         OK
   Slot number...        OK

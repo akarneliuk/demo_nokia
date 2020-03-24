@@ -5,7 +5,7 @@ device_real:
     hostname: vSIM
     type: 7750 SR-1
   cards:
-    1:
+    1: 
       type: iom-1:he
       state: unprovisioned
     A: 

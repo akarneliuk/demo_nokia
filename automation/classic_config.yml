@@ -16,6 +16,7 @@
         parents:
           - configure
           - system
+      when: inventory_hostname != device_real.system.hostname
 
     - name: CONFIGURE NOKIA SR OS -- 2 --
       sros_config:
